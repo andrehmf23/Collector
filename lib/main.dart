@@ -2,15 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_collector/pages/item_page.dart';
 import 'package:flutter_application_collector/pages/items_page.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_application_collector/pages/register_page.dart';
-import 'firebase_options.dart';
 
 void main() async {
-  // Inicialize o Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   runApp(const MyApp());
 }
 
@@ -63,7 +57,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Icon(Icons.add_a_photo),
+        title: const Icon(Icons.book),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

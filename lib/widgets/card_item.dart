@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_collector/pages/register_page.dart';
 
 class CardItem extends StatelessWidget {
   final item;
@@ -29,7 +30,11 @@ class CardItem extends StatelessWidget {
           ],
         ),
         onTap: () => {
-          Navigator.pushNamed(context, '/item', arguments: item)
+          Navigator.push(context, 
+            MaterialPageRoute(
+              builder: (context) => const RegisterPage()
+            )
+          )
         },
       ),
     );
