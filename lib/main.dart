@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_application_collector/pages/item_page.dart';
 import 'package:flutter_application_collector/pages/items_page.dart';
 import 'package:flutter_application_collector/pages/register_page.dart';
 
