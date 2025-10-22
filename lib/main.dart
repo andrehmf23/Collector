@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_collector/data/items.dart';
-import 'package:flutter_application_collector/pages/all_page.dart';
+import 'package:flutter_application_collector/pages/item_page.dart';
+import 'package:flutter_application_collector/pages/items_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_application_collector/pages/register_page.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  // Inicialize o Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
 }
+
+//____________________[MyApp]____________________//
+// Definição dos temas utilizados em toda a aplicação
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -40,37 +45,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
+//____________________[HomePage]____________________//
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
+  
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _indice = 0;
-
-  List<Widget> telas = [
-    Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0), 
-          child:TextField(
-            cursorColor: Colors.white,
-            style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(
-              labelStyle: TextStyle(color: Colors.white),
-              labelText: 'Pesquisar',
-            ),
-          )
-        ),
-        Expanded(
-          child: AllPage(items: items), // agora ocupa o resto da tela
-        ),
-      ],
-    ),
-    Center(child: Text( "Minhas" )),
-  ];
+  int _filter = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -78,10 +63,17 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Collector'),
+        title: const Icon(Icons.add_a_photo),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const RegisterPage()
+            )
+          );
+        },
         child: Icon(Icons.add),
         backgroundColor: colors.onPrimary,
         foregroundColor: colors.primary,
@@ -90,8 +82,8 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _indice,
-        onTap: (i) => setState(() => _indice = i),
+        currentIndex: _filter,
+        onTap: (i) => setState(() => _filter = i),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.view_list),
@@ -108,10 +100,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       backgroundColor: colors.surface,
-      body: IndexedStack(
-        index: _indice,
-        children: telas,
-      ),
+      body: ItemsPage(filter: _filter)
     );
   }
 }

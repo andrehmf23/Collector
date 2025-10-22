@@ -1,10 +1,10 @@
 
 import 'package:flutter/material.dart';
 
-class cardItem extends StatelessWidget {
+class CardItem extends StatelessWidget {
   final item;
 
-  const cardItem(
+  const CardItem(
     {
       required this.item,
       super.key
@@ -23,10 +23,14 @@ class cardItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Icon(item['purchased'] ? Icons.star : Icons.star_border),
+            IconButton(icon: Icon(item['purchased'] ? Icons.star : Icons.star_border), onPressed: () => {}),
+            SizedBox(width: 5),
             IconButton(icon: Icon(Icons.delete), onPressed: () => {}),
           ],
         ),
+        onTap: () => {
+          Navigator.pushNamed(context, '/item', arguments: item)
+        },
       ),
     );
   }
