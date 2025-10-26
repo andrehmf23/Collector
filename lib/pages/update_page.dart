@@ -5,27 +5,26 @@ import 'package:flutter_application_collector/data/item.dart';
 import 'package:flutter_application_collector/pages/camera_page.dart';
 import '../widgets/build_image.dart';
 
-class RegisterPage extends StatefulWidget {
+class UpdatePage extends StatefulWidget {
   final Items items;
+  final Item item;
 
-  const RegisterPage({
+  const UpdatePage({
     super.key, 
-    required this.items
+    required this.items,
+    required this.item
     });
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<UpdatePage> createState() => _UpdatePageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _UpdatePageState extends State<UpdatePage> {
   // Variáveis de estado da tela
   bool _isPurchased = false;
 
   bool _error = false;
   String _errorMessage = '';
-
-  Item newItem = Item(id: 0, name: '', price: 0, description: '', purchased: false);
-  
 
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
@@ -33,21 +32,32 @@ class _RegisterPageState extends State<RegisterPage> {
 
   String _photo = '';
 
+  @override
+  void initState() {
+    super.initState();
+    _nameController.text = widget.item.name;
+    _priceController.text = widget.item.price.toString();
+    _descriptionController.text = widget.item.description;
+    _isPurchased = widget.item.purchased;
+    _photo = widget.item.photo;
+  }
+
   // Função para adicionar um novo item ao banco de dados
-  void _addItem() {
+  void _updateItem() {
+    widget.item.name = _nameController.text;
+    widget.item.price = double.parse(_priceController.text);
+    widget.item.description = _descriptionController.text;
+    widget.item.purchased = _isPurchased;
+    widget.item.photo = _photo;
 
-    newItem.id = widget.items.items.length;
-    newItem.name = _nameController.text;
-    newItem.price = double.parse(_priceController.text);
-    newItem.description = _descriptionController.text;
-    newItem.purchased = _isPurchased;
-    newItem.photo = _photo;
-
-    widget.items.addItem(newItem);
-
+    widget.items.updateItem(widget.item);
     widget.items.saveItems();
     
-    Navigator.pop(context, newItem);
+    Navigator.pop(context, widget.item);
+  }
+
+  void updatePhoto(String photo) { 
+    _photo = photo;
   }
 
   void _treatment() { 
@@ -58,17 +68,13 @@ class _RegisterPageState extends State<RegisterPage> {
     if (_descriptionController.text.length == 1) _descriptionController.text = '';
   }
 
-  void updatePhoto(String photo) { 
-    _photo = photo;
-  }
-
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Adicionar Colecionável'),
+        title: const Text('Atualizar Colecionável'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -223,7 +229,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       _errorMessage = 'Por favor, insira um preço.';
                     });
                   } else {
-                    _addItem();
+                    _updateItem();
                   }
                 },
                 child: const Text('Salvar',

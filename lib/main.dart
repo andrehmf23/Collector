@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_collector/pages/items_page.dart';
 import 'package:flutter_application_collector/pages/register_page.dart';
+import 'package:flutter_application_collector/data/items.dart';
+
 
 void main() async {
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return Container(); // substitui o amarelo por um container vazio
+  };
+  
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
 }
 
@@ -15,6 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Collector',
       theme: ThemeData(
         colorScheme: const ColorScheme.light(
@@ -48,6 +57,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _filter = 0;
+  Items items = Items(key: 'items');
+
+  @override
+  void initState() {
+    super.initState();
+    _loadItems();
+  }
+
+  Future<void> _loadItems() async {
+    await items.loadItems(); // espera carregar do SharedPreferences
+    setState(() {}); // atualiza a UI
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,13 +79,14 @@ class _HomePageState extends State<HomePage> {
         title: const Icon(Icons.book),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const RegisterPage()
+              builder: (context) => RegisterPage(items: items),
             )
           );
+          setState(() {});
         },
         child: Icon(Icons.add),
         backgroundColor: colors.onPrimary,
@@ -92,7 +114,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       backgroundColor: colors.surface,
-      body: ItemsPage(filter: _filter)
+      body: ItemsPage(filter: _filter, items: items),
     );
   }
 }

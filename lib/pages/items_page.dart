@@ -1,15 +1,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_collector/widgets/card_item.dart';
-import 'package:flutter_application_collector/data/data.dart';
+import '../data/items.dart';
+import '../data/item.dart';
 
 class ItemsPage extends StatefulWidget {
   final int filter;
+  final Items items;
 
   const ItemsPage(
     {
       super.key,
-      required this.filter
+      required this.filter,
+      required this.items
     }
   );
 
@@ -19,52 +22,37 @@ class ItemsPage extends StatefulWidget {
 
 class _ItemsPageState extends State<ItemsPage> {
   String _search = '';
-
-  List<Map<String, dynamic>> _filteredItems = [];
+  List<Item> _filteredItems = [];
 
   void _updateFilteredItems() {
-    _filteredItems = data
-      .where((item) => item['name']
-      .toLowerCase()
-      .contains(_search.toLowerCase()))
-      .toList();
-  }
+    _filteredItems = widget.items.items
+        .where((item) => item.name.toLowerCase().contains(_search.toLowerCase()))
+        .toList();
 
-  @override
-  void initState() {
-    super.initState();
-    _updateFilteredItems();
-  }
-
-  @override
-  void didUpdateWidget(covariant ItemsPage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.filter != widget.filter) {
-      // Atualiza apenas a lista filtrada
-      switch (widget.filter) {
-        case 0:
-          _filteredItems = data;
-          break;
-        case 1:
-          _filteredItems = data.where((item) => !item['purchased']).toList();
-          break;
-        case 2:
-          _filteredItems = data.where((item) => item['purchased']).toList();
-          break;
-      }
-      setState(() {}); // só atualiza o necessário
+    switch (widget.filter) {
+      case 1:
+        _filteredItems = _filteredItems.where((item) => !item.purchased).toList();
+        break;
+      case 2:
+        _filteredItems = _filteredItems.where((item) => item.purchased).toList();
+        break;
     }
   }
-  
+
+  void _deleteItem(Item item) {
+    widget.items.removeItem(item);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    _updateFilteredItems();
 
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(5.0), 
+          padding: const EdgeInsets.all(20),
           child: TextField(
             cursorColor: colors.onPrimary,
             style: TextStyle(color: colors.onPrimary),
@@ -72,22 +60,16 @@ class _ItemsPageState extends State<ItemsPage> {
               labelStyle: TextStyle(color: colors.onPrimary),
               labelText: 'Pesquisar',
             ),
-            onChanged: (value) => setState(() {
-              _search = value;
-              _updateFilteredItems();
-            }),
+            onChanged: (value) => setState(() => _search = value),
           ),
         ),
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: ListView.builder(
-              padding: const EdgeInsets.only(bottom: 80),
-              itemCount: _filteredItems.length,
-              itemBuilder: (context, index) {
-                return CardItem(item: _filteredItems[index]);
-              },
-            ),
+          child: ListView.builder(
+            padding: const EdgeInsets.only(bottom: 80, left: 5, right: 5),
+            itemCount: _filteredItems.length,
+            itemBuilder: (context, index) {
+              return CardItem(item: _filteredItems[index], items: widget.items, deleteItem: _deleteItem);
+            },
           ),
         ),
       ],
