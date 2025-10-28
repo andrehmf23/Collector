@@ -37,6 +37,7 @@ dependencies:
   shared_preferences: ^2.5.3
   camera: ^0.11.2+1
   file_picker: ^10.3.3
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -54,12 +55,19 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  assets:
+    - assets/
+  fonts:
+    - family: Audiowide
+      fonts:
+        - asset: fonts/Audiowide-Regular.ttf
+    - family: Tapestry
+      fonts:
+        - asset: fonts/Tapestry-Regular.ttf
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
@@ -90,3 +98,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/logow.png"
