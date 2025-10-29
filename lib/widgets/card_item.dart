@@ -34,8 +34,10 @@ class _CardItemState extends State<CardItem> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Card(
-      color: Color.fromRGBO(30, 30, 30, 0.5),
+      color: colors.tertiary,
       child: ListTile(
         leading: IconButton(
           icon: SizedBox(
@@ -43,7 +45,7 @@ class _CardItemState extends State<CardItem> {
             height: 30,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5), // opcional, pra arredondar
-              child: buildImage(widget.item.photo, 30),
+              child: buildImage(widget.item.photo, 30, color: colors.onPrimary),
             ),
           ),
           onPressed: () {
@@ -59,14 +61,17 @@ class _CardItemState extends State<CardItem> {
             })); // atualiza a UI ao voltar
           },
         ),
-        title: Text(widget.item.name),
-        subtitle: Text(widget.item.description),
+        title: Text(widget.item.name, style: TextStyle(fontWeight: FontWeight.bold, color: colors.onPrimary)),
+        subtitle: Text(widget.item.description, style: TextStyle(color: colors.onPrimary)),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             if(!widget.item.purchased) IconButton(
-              icon: Icon(Icons.local_grocery_store), 
+              icon: Icon(
+                Icons.local_grocery_store,
+                color: colors.onPrimary,
+              ), 
               onPressed: () {
                 widget.item.purchased = true;
                 widget.items.updateItem(widget.item);
@@ -75,7 +80,10 @@ class _CardItemState extends State<CardItem> {
             ),
             SizedBox(width: 5),
             IconButton(
-              icon: Icon(Icons.delete), 
+              icon: Icon(
+                Icons.delete,
+                color: colors.onPrimary,
+              ), 
               onPressed: () {
               widget.deleteItem(widget.item);
             }),

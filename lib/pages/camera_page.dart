@@ -44,6 +44,7 @@ class _CameraPageState extends State<CameraPage> {
     if (!_controller!.value.isInitialized) return;
     final image = await _controller!.takePicture();
     widget.updatePhoto(image.path);
+    Navigator.pop(context);
     print('📸 Foto salva em: ${image.path}');
   }
 
@@ -56,6 +57,16 @@ class _CameraPageState extends State<CameraPage> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+            ),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: Stack(
         children: [
           // Fundo preto para preencher a tela
@@ -79,11 +90,29 @@ class _CameraPageState extends State<CameraPage> {
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 40),
-              child: FloatingActionButton(
-                onPressed: _takePicture,
-                backgroundColor: Colors.white,
-                child: const Icon(Icons.camera_alt, color: Colors.black),
-              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 25,
+                children: [
+                  FloatingActionButton(
+                    onPressed: () => {
+                      Navigator.pop(context)
+                    },
+                    backgroundColor: Colors.white,
+                    child: const Icon(Icons.arrow_back, color: Colors.black),
+                  ),
+                  FloatingActionButton(
+                    onPressed: _takePicture,
+                    backgroundColor: Colors.white,
+                    child: const Icon(Icons.camera_alt, color: Colors.black, size: 30),
+                  ),
+                  FloatingActionButton(
+                    onPressed: _takePicture,
+                    backgroundColor: Colors.white,
+                    child: const Icon(Icons.photo, color: Colors.black),
+                  ),
+                ],
+              )
             ),
           ),
         ],

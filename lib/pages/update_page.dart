@@ -223,7 +223,7 @@ class _UpdatePageState extends State<UpdatePage> {
                       _errorMessage = 'Por favor, insira um nome.';
                     });
                     return;
-                  } else if ((double.tryParse(_priceController.text) ?? 0) == 0 && _isPurchased == false) {
+                  } else if (_priceController.text.isEmpty && _isPurchased == false) {
                     setState(() {
                       _error = true;
                       _errorMessage = 'Por favor, insira um preço.';

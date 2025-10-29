@@ -27,18 +27,20 @@ class MyApp extends StatelessWidget {
       title: 'Collector',
       theme: ThemeData(
         colorScheme: const ColorScheme.light(
-          primary: Colors.white,       // cor principal
-          onPrimary: Colors.black,     // texto ou ícone sobre primary
-          surface: Colors.white,       // cor de cards, botões, etc.
-          onSurface: Colors.black,
+          primary: Colors.white,
+          onPrimary: Colors.black,
+          secondary: Colors.blueGrey,
+          onSecondary: Colors.cyan,
+          tertiary: Color.fromARGB(255, 199, 199, 199),
         ),
       ),
       darkTheme: ThemeData(
         colorScheme: const ColorScheme.dark(
           primary: Colors.black,
           onPrimary: Colors.white,
-          surface: Colors.black,
-          onSurface: Colors.white,
+          secondary: Colors.blueGrey,
+          onSecondary: Colors.cyan,
+          tertiary: Color.fromARGB(255, 22, 22, 22),
         ),
       ),
       home: const HomePage(),
@@ -103,22 +105,30 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _filter,
         onTap: (i) => setState(() => _filter = i),
-        items: const [
+        backgroundColor: colors.primary,        // cor de fundo do BottomNavigationBar
+        selectedItemColor: colors.onSecondary,    // cor do ícone/texto selecionado
+        unselectedItemColor: colors.secondary,  // cor dos ícones/textos não selecionados
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.view_list),
+            icon: Icon(
+              Icons.view_list,
+            ),
             label: 'Todas',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.star),
+            icon: Icon(
+              Icons.star,
+            ),
             label: 'Desejadas',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
+            icon: Icon(
+              Icons.favorite,
+            ),
             label: 'Minhas',
           ),
         ],
       ),
-      backgroundColor: colors.surface,
       body: ItemsPage(filter: _filter, items: items),
     );
   }

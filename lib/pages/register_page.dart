@@ -38,7 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     newItem.id = widget.items.items.length;
     newItem.name = _nameController.text;
-    newItem.price = double.parse(_priceController.text);
+    newItem.price = double.tryParse(_priceController.text) ?? 0.0;
     newItem.description = _descriptionController.text;
     newItem.purchased = _isPurchased;
     newItem.photo = _photo;
@@ -217,7 +217,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       _errorMessage = 'Por favor, insira um nome.';
                     });
                     return;
-                  } else if ((double.tryParse(_priceController.text) ?? 0) == 0 && _isPurchased == false) {
+                  } else if (_priceController.text.isEmpty && _isPurchased == false) {
                     setState(() {
                       _error = true;
                       _errorMessage = 'Por favor, insira um preço.';
