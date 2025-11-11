@@ -26,7 +26,7 @@ class _CameraPageState extends State<CameraPage> {
 
   Future<void> _initCamera() async {
     cameras = await availableCameras();
-    _controller = CameraController(cameras!.first, ResolutionPreset.medium);
+    _controller = CameraController(cameras!.first, ResolutionPreset.medium, enableAudio: false);
     await _controller!.initialize();
     if (!mounted) return;
     setState(() {
@@ -74,7 +74,7 @@ class _CameraPageState extends State<CameraPage> {
 
           // Centraliza a câmera verticalmente
           Align(
-            alignment: Alignment.center,
+            alignment: Alignment(0, -0.5),
             child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.9, // 90% da largura
               height: MediaQuery.of(context).size.height * 0.6, // 60% da altura
@@ -107,7 +107,7 @@ class _CameraPageState extends State<CameraPage> {
                     child: const Icon(Icons.camera_alt, color: Colors.black, size: 30),
                   ),
                   FloatingActionButton(
-                    onPressed: _takePicture,
+                    onPressed: () => {},
                     backgroundColor: Colors.white,
                     child: const Icon(Icons.photo, color: Colors.black),
                   ),
